@@ -1,12 +1,12 @@
 package common;
 
-import java.util.ArrayList;
+import scala.collection.immutable.List;
 
 public class AtomasBotRunner {
 
     private final MoveCalculator moveCalculator;
     private final AtomasBotsApi atomasBotsApi;
-    private Game bestGame = new Game("id", new ArrayList<Integer>(), -1000, 0, 0);
+    private GameJava bestGame = new GameJava("id", null, -1000, 0, 0);
 
     public AtomasBotRunner(MoveCalculator moveCalculator) {
         this(moveCalculator, true);
@@ -23,7 +23,7 @@ public class AtomasBotRunner {
 
     public void run(String name) throws Exception {
         while (true) {
-            Game newGame = atomasBotsApi.newGame(name).execute().body();
+            GameJava newGame = atomasBotsApi.newGame(name).execute().body();
             while (!newGame.isEndOfGame()) {
                 newGame = doMove(newGame);
             }
@@ -31,11 +31,11 @@ public class AtomasBotRunner {
         }
     }
 
-    private Game doMove(Game game) throws Exception {
-        return atomasBotsApi.move(game.id, moveCalculator.calculateMove(game)).execute().body();
+    private GameJava doMove(GameJava game) throws Exception {
+        return atomasBotsApi.move(game.id, moveCalculator.calculateMove(GameConverter.toGame(game))).execute().body();
     }
 
-    private void logStatus(Game game) {
+    private void logStatus(GameJava game) {
         if (game.score >= bestGame.score) {
             bestGame = game;
         }

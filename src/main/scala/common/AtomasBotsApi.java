@@ -14,10 +14,10 @@ import retrofit.http.Query;
 interface AtomasBotsApi {
 
     @GET("/move/{gameId}/{target}")
-    Call<Game> move(@Path("gameId") String gameId, @Path("target") int target);
+    Call<GameJava> move(@Path("gameId") String gameId, @Path("target") int target);
 
     @GET("/new_game")
-    Call<Game> newGame(@Query("name") String name);
+    Call<GameJava> newGame(@Query("name") String name);
 
     class Builder {
         static AtomasBotsApi createApi(boolean remote) {
